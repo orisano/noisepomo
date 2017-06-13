@@ -1,7 +1,7 @@
 (function(getUserMedia, AudioContext) {
   "use strict";
 
-  function* pinkFilter() {
+  function* fnoise() {
     const z = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const k = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const N = z.length;
@@ -13,24 +13,25 @@
 
     let out = 0.0;
     while (true) {
-      let x = yield out * 1000;
+      let x = [-1, 1][Math.random() * 2 | 0];
       for (let i = 0; i < N; i++) {
         z[i] = (x * k[i] + z[i] * (1.0 - k[i])); 
         x = (x + z[i]) * 0.5;
       }
       out = 0.75 * x + 0.25 * out;
+      yield out;
     }
   }
 
   document.addEventListener("DOMContentLoaded", function() {
-    const gen = pinkFilter();
+    const gen = fnoise();
 
     const context = new AudioContext();
     const whiteNoise = context.createScriptProcessor(4096, 1, 1);
     whiteNoise.addEventListener("audioprocess", function(ev) {
       const output = ev.outputBuffer.getChannelData(0);
       for (let i = 0; i < whiteNoise.bufferSize; i++) {
-        output[i] = gen.next(((Math.random() * 2 | 0) & 1) ? 1 : -1).value;
+        output[i] = gen.next().value * 320;
       }
     });
     const osc = context.createOscillator();
