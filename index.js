@@ -38,12 +38,12 @@
 
     function work() {
       whiteNoise.connect(context.destination);
-      setTimeout(25 * 60 * 1000, rest);
+      setTimeout(rest, 25 * 60 * 1000);
     }
 
     function rest() {
       whiteNoise.disconnect();
-      setTimeout(5 * 60 * 1000, work);
+      setTimeout(work, 5 * 60 * 1000);
     }
 
     const $startButton = document.getElementById("button-start");
