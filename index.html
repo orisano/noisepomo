@@ -4,14 +4,19 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="reset.css">
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/kute.js/1.6.2/kute.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/kute.js/1.6.2/kute-svg.min.js"></script> <!-- SVG Plugin -->
   <script src="index.js"></script>
 
   <title>WN Pomodoro</title>
 </head>
 <body>
+  <svg id="action" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <path id="play" d="M11,50l0,0l39,-22.52l0,45ZM89,5l0,90l-39,-22.52l0,-45Z">
+  </svg>
   <ul class="actions">
-    <li class="action"><button id="button-stop" class="button">STOP</button></li>
-    <li class="action"><button id="button-start" class="button">START</button></li>
+    <li class="action"><button id="button-stop" class="button secondary">STOP</button></li>
+    <li class="action"><button id="button-start" class="button primary">START</button></li>
   </ul>
 </body>
 </html>
