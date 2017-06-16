@@ -55,32 +55,22 @@
     const opt = {
       duration: 2000,
     };
-    let flag = true;
+
+    function createPath(path) { return { path }; }
+    const playLeft = createPath('#play-left');
+    const playRight = createPath('#play-right');
+    const pauseLeft = createPath('#pause-left');
+    const pauseRight = createPath('#pause-right');
+    let play = true;
     $action.addEventListener('click', () => {
-      if (flag) {
-        KUTE.fromTo('#left', {
-          path: '#play-left',
-        }, {
-          path: '#pause-left',
-        }, opt).start();
-        KUTE.fromTo('#right', {
-          path: '#play-right',
-        }, {
-          path: '#pause-right',
-        }, opt).start();
+      if (play) {
+        KUTE.fromTo('#left', playLeft, pauseLeft, opt).start();
+        KUTE.fromTo('#right', playRight, pauseRight, opt).start();
       } else {
-        KUTE.fromTo('#left', {
-          path: '#pause-left',
-        }, {
-          path: '#play-left',
-        }, opt).start();
-        KUTE.fromTo('#right', {
-          path: '#pause-right',
-        }, {
-          path: '#play-right',
-        }, opt).start();
+        KUTE.fromTo('#left', pauseLeft, playLeft, opt).start();
+        KUTE.fromTo('#right', pauseRight, playRight, opt).start();
       }
-      flag = !flag;
+      play = !play;
     });
   });
 })(

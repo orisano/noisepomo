@@ -4,20 +4,29 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="reset.css">
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/kute.js/1.6.2/kute.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/kute.js/1.6.2/kute-svg.min.js"></script> <!-- SVG Plugin -->
+<style>
+.hide {
+    visibility: hidden;
+}
+</style>
   <script src="index.js"></script>
 
   <title>WN Pomodoro</title>
 </head>
 <body>
   <svg id="action" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-      <path id="play" d="M11,50l0,0l39,-22.52l0,45ZM89,5l0,90l-39,-22.52l0,-45Z"></path>
-      <path id="pause" d="M8,95l0,-90l38,0l0,90ZM92,5l0,90l-38,0l0,-90Z"></path>
+      <path id="left"></path>
+      <path id="right"></path>
+      <path id="play-left" class="hide" d="M11,95l0,-90l39,22.52l0,45Z"></path>
+      <path id="play-right" class="hide" d="M89,50l0,0l-39,22.52l0,-45Z"></path>
+      <path id="pause-left" class="hide" d="M12,90l0,-80l32,0l0,80Z"></path>
+      <path id="pause-right" class="hide" d="M88,10l0,80l-32,0l0,-80Z"></path>
   </svg>
   <ul class="actions">
     <li class="action"><button id="button-stop" class="button secondary">STOP</button></li>
     <li class="action"><button id="button-start" class="button primary">START</button></li>
   </ul>
+  <script src="https://cdn.jsdelivr.net/kute.js/1.6.2/kute.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/kute.js/1.6.2/kute-svg.min.js"></script> <!-- SVG Plugin -->
 </body>
 </html>
