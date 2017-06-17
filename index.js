@@ -10,7 +10,7 @@
 
     let out = 0.0;
     while (true) {
-      let x = [-1, 1][Math.Floor(Math.random() * 2)];
+      let x = [-1, 1][Math.floor(Math.random() * 2)];
       for (let i = 0; i < N; i += 1) {
         z[i] = (x * k[i]) + (z[i] * (1.0 - k[i]));
         x = (x + z[i]) * 0.5;
