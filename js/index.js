@@ -9,6 +9,7 @@
     }
 
     let out = 0.0;
+    // eslint-disable-next-line
     while (true) {
       let x = [-1, 1][Math.floor(Math.random() * 2)];
       for (let i = 0; i < N; i += 1) {
@@ -53,7 +54,7 @@
 
     const $action = document.getElementById('action');
     const opt = {
-      duration: 2000,
+      duration: 1000,
     };
 
     function createPath(path) { return { path }; }
