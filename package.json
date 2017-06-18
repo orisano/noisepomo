@@ -1,12 +1,12 @@
 {
-  "name": "pinkpomo",
+  "name": "noisepomo",
   "scripts": {
     "lint": "eslint .",
     "fmt": "jsfmt"
   },
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@github.com:orisano/pinkpomo.git",
+  "repository": "git@github.com:orisano/noisepomo.git",
   "author": "Nao Yonashiro <owan.orisano@gmail.com>",
   "license": "MIT",
   "devDependencies": {
