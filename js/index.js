@@ -18,6 +18,30 @@
       }
       out = (0.75 * x) + (0.25 * out);
       yield out;
+  // Paul Kellet's refined method
+  // ref. http://www.musicdsp.org/files/pink.txt
+  function* genPinkNoisePK() {
+    let [b0, b1, b2, b3, b4, b5, b6] = [0, 0, 0, 0, 0, 0, 0];
+    // eslint-disable-next-line
+    while (true) {
+      const x = (Math.random() * 2) - 1;
+      b0 = (0.99886 * b0) + (0.0555179 * x);
+      b1 = (0.99332 * b1) + (0.0750759 * x);
+      b2 = (0.96900 * b2) + (0.1538520 * x);
+      b3 = (0.86650 * b3) + (0.3104856 * x);
+      b4 = (0.55000 * b4) + (0.5329522 * x);
+      b5 = (-0.7616 * b5) + (0.0168980 * x);
+      yield (b0 + b1 + b2 + b3 + b4 + b5 + b6 + (x * 0.5362)) * 0.11;
+      b6 = 0.115926 * x;
+    }
+  }
+
+  function* genBrownianNoise() {
+    let acc = 0;
+    while (true) {
+      const x = (Math.random() * 2) - 1;
+      acc += x * 0.064;
+      yield acc;
     }
   }
 
