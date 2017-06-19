@@ -1,5 +1,7 @@
 ((getUserMedia, AudioContext) => {
-  function* fnoise() {
+  // Takayuki Hosoda's refined method
+  // ref. http://www.finetune.co.jp/~lyuka/technote/pinknoise/
+  function* genPinkNoiseTH() {
     const z = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const k = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const N = z.length;
@@ -13,11 +15,14 @@
     while (true) {
       let x = [-1, 1][Math.floor(Math.random() * 2)];
       for (let i = 0; i < N; i += 1) {
-        z[i] = (x * k[i]) + (z[i] * (1.0 - k[i]));
+        z[i] = (k[i] * x) + ((1.0 - k[i]) * z[i]);
         x = (x + z[i]) * 0.5;
       }
       out = (0.75 * x) + (0.25 * out);
-      yield out;
+      yield out * 320;
+    }
+  }
+
   // Paul Kellet's refined method
   // ref. http://www.musicdsp.org/files/pink.txt
   function* genPinkNoisePK() {
@@ -46,27 +51,28 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    const KUTE = window.KUTE;
-    const gen = fnoise();
+    const noise = genPinkNoisePK();
+    const gain = 1;
 
     const context = new AudioContext();
-    const whiteNoise = context.createScriptProcessor(4096, 1, 1);
-    whiteNoise.addEventListener('audioprocess', (ev) => {
+    const BUFFER_SIZE = 4096;
+    const scriptProcessor = context.createScriptProcessor(BUFFER_SIZE, 1, 1);
+    scriptProcessor.addEventListener('audioprocess', (ev) => {
       const output = ev.outputBuffer.getChannelData(0);
-      for (let i = 0; i < whiteNoise.bufferSize; i += 1) {
-        output[i] = gen.next().value * 320;
+      for (let i = 0; i < BUFFER_SIZE; i += 1) {
+        output[i] = noise.next().value * gain;
       }
     });
     const osc = context.createOscillator();
-    osc.connect(whiteNoise);
+    osc.connect(scriptProcessor);
 
     function work(callback) {
-      whiteNoise.connect(context.destination);
+      scriptProcessor.connect(context.destination);
       setTimeout(callback, 25 * 60 * 1000);
     }
 
     function rest() {
-      whiteNoise.disconnect();
+      scriptProcessor.disconnect();
       setTimeout(() => work(rest), 5 * 60 * 1000);
     }
 
@@ -98,10 +104,8 @@
     });
   });
 })(
-  window.navigator.getUserMedia
-  || window.navigator.webkitGetUserMedia
-  || window.navigator.mozGetUserMedia,
-  window.AudioContext
-  || window.webkitAudioContext
-  || window.mozAudioContext,
+  window.navigator.getUserMedia ||
+    window.navigator.webkitGetUserMedia ||
+    window.navigator.mozGetUserMedia,
+  window.AudioContext || window.webkitAudioContext || window.mozAudioContext,
 );
