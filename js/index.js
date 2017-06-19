@@ -46,32 +46,31 @@
       setTimeout(() => work(rest), 5 * 60 * 1000);
     }
 
-    const $startButton = document.getElementById('button-start');
-    const $stopButton = document.getElementById('button-stop');
-
-    $startButton.addEventListener('click', work);
-    $stopButton.addEventListener('click', rest);
-
+    const $actionButton = document.getElementById('action-button');
     const $action = document.getElementById('action');
-    const opt = {
-      duration: 1000,
+    const nextState = {
+      '#play': '#pause',
+      '#pause': '#play',
     };
 
-    function createPath(path) { return { path }; }
-    const playLeft = createPath('#play-left');
-    const playRight = createPath('#play-right');
-    const pauseLeft = createPath('#pause-left');
-    const pauseRight = createPath('#pause-right');
-    let play = true;
-    $action.addEventListener('click', () => {
-      if (play) {
-        KUTE.fromTo('#left', playLeft, pauseLeft, opt).start();
-        KUTE.fromTo('#right', playRight, pauseRight, opt).start();
-      } else {
-        KUTE.fromTo('#left', pauseLeft, playLeft, opt).start();
-        KUTE.fromTo('#right', pauseRight, playRight, opt).start();
+    $action.addEventListener('custom-play', work);
+    $action.addEventListener('custom-pause', rest);
+
+    $action.addEventListener('transitionend', () => {
+      if ($action.classList.contains('disabled')) {
+        $action.href.baseVal = nextState[$action.href.baseVal];
+        $action.classList.remove('disabled');
       }
-      play = !play;
+    });
+    $actionButton.addEventListener('click', () => {
+      if ($action.classList.contains('disabled')) {
+        return;
+      }
+
+      const action = `custom-${$action.href.baseVal.substr(1)}`;
+      const event = new window.CustomEvent(action, {});
+      $action.dispatchEvent(event);
+      $action.classList.add('disabled');
     });
   });
 })(

@@ -4,29 +4,23 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/style.css">
-<style>
-.hide {
-    visibility: hidden;
-}
-</style>
   <script src="js/index.js"></script>
 
   <title>Noise Pomodoro</title>
 </head>
 <body>
-  <svg id="action" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="300px" height="300px">
-      <path id="left"></path>
-      <path id="right"></path>
-      <path id="play-left" class="hide" d="M11,95l0,-90l39,22.52l0,45Z"></path>
-      <path id="play-right" class="hide" d="M89,50l0,0l-39,22.52l0,-45Z"></path>
-      <path id="pause-left" class="hide" d="M12,90l0,-80l32,0l0,80Z"></path>
-      <path id="pause-right" class="hide" d="M88,10l0,80l-32,0l0,-80Z"></path>
+  <svg id="action-button" xmlns="http://www.w3.org/2000/svg" viewbox="-20 -20 140 140" width="200px" height="200px">
+      <defs>
+        <g id="play">
+            <polygon points="27.5,89 27.5,11 95,50" />
+        </g>
+        <g id="pause">
+            <polygon points="16,80 16,20 42,20 42,80" />
+            <polygon points="84,20 84,80 56,80 56,20" />
+        </g>
+      </defs>
+      <circle cx="50" cy="50" r="60" stroke="black" stroke-width="4" fill="none" />
+      <use id="action" href="#play" stroke="black" stroke-width="3" stroke-linejoin="round" />
   </svg>
-  <ul class="actions">
-    <li class="action"><button id="button-stop" class="button secondary">STOP</button></li>
-    <li class="action"><button id="button-start" class="button primary">START</button></li>
-  </ul>
-  <script src="https://cdn.jsdelivr.net/kute.js/1.6.2/kute.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/kute.js/1.6.2/kute-svg.min.js"></script> <!-- SVG Plugin -->
 </body>
 </html>
