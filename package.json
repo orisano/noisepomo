@@ -1,8 +1,8 @@
 {
   "name": "noisepomo",
   "scripts": {
-    "lint": "eslint .",
-    "fmt": "jsfmt"
+    "lint": "prettier-eslint --write 'js/**/*.js'",
+    "fmt": "prettier --single-quote --write 'js/**/*.js'"
   },
   "version": "1.0.0",
   "main": "index.js",
@@ -13,7 +13,10 @@
     "eslint": "^4.0.0",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.3.0",
-    "jsfmt": "^0.5.3"
+    "htmlhint": "^0.9.13",
+    "prettier": "^1.4.4",
+    "prettier-eslint": "^6.3.0",
+    "prettier-eslint-cli": "^4.1.1"
   },
   "dependencies": {}
 }
