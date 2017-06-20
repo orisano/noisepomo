@@ -66,6 +66,57 @@
     const osc = context.createOscillator();
     osc.connect(scriptProcessor);
 
+    class Timer {
+      constructor() {
+        this.reject = null;
+        this.resolve = null;
+        this.remain = 0;
+        this.handler = -1;
+        this.startTime = null;
+      }
+
+      start(ms) {
+        this.reset();
+        this.startTime = Date.now();
+        this.remain = ms;
+        return new Promise((resolve, reject) => {
+          this.resolve = resolve;
+          this.reject = reject;
+          this.handler = setTimeout(resolve, ms);
+        }).then(() => {
+          this.resolve = null;
+          this.reject = null;
+          this.remain = 0;
+          this.handler = -1;
+        });
+      }
+
+      stop() {
+        if (this.reject === null) return;
+        this.reject();
+        this.reject = null;
+      }
+
+      reset() {
+        if (this.handler === -1) return;
+        clearTimeout(this.handler);
+        this.handler = -1;
+      }
+
+      pause() {
+        if (this.handler === -1) return;
+        clearTimeout(this.handler);
+        this.handler = -1;
+        this.remain -= Date.now() - this.startTime;
+        this.remain = Math.max(this.remain, 0);
+      }
+
+      resume() {
+        if (this.handler !== -1) return;
+        this.startTime = Date.now();
+        this.handler = setTimeout(this.resolve, this.remain);
+      }
+    }
     function work(callback) {
       scriptProcessor.connect(context.destination);
       setTimeout(callback, 25 * 60 * 1000);
