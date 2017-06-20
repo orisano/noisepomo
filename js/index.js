@@ -43,6 +43,7 @@
 
   function* genBrownianNoise() {
     let acc = 0;
+    // eslint-disable-next-line
     while (true) {
       const x = (Math.random() * 2) - 1;
       acc += x * 0.064;
@@ -51,7 +52,23 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    const noise = genPinkNoisePK();
+    const $noiseSelector = document.getElementById('noise-select');
+    const noises = [
+      { name: 'PinkNoise (Takayuki Hosoda\'s)', generator: genPinkNoiseTH },
+      { name: 'PinkNoise (Paul Kellet\'s)', generator: genPinkNoisePK },
+      { name: 'BrownianNoise', generator: genBrownianNoise },
+    ];
+    noises.forEach((noise, idx) => {
+      const $noiseOption = document.createElement('option');
+      $noiseOption.value = idx;
+      $noiseOption.textContent = noise.name;
+      $noiseSelector.appendChild($noiseOption);
+    });
+
+    let noiseGenerator = genPinkNoiseTH();
+    $noiseSelector.addEventListener('change', (ev) => {
+      noiseGenerator = noises[+ev.target.value].generator();
+    });
     const gain = 1;
 
     const context = new AudioContext();
@@ -60,7 +77,7 @@
     scriptProcessor.addEventListener('audioprocess', (ev) => {
       const output = ev.outputBuffer.getChannelData(0);
       for (let i = 0; i < BUFFER_SIZE; i += 1) {
-        output[i] = noise.next().value * gain;
+        output[i] = noiseGenerator.next().value * gain;
       }
     });
     const osc = context.createOscillator();
@@ -117,6 +134,7 @@
         this.handler = setTimeout(this.resolve, this.remain);
       }
     }
+
     function work(callback) {
       scriptProcessor.connect(context.destination);
       setTimeout(callback, 25 * 60 * 1000);
