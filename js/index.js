@@ -135,16 +135,6 @@
       }
     }
 
-    function work(callback) {
-      scriptProcessor.connect(context.destination);
-      setTimeout(callback, 25 * 60 * 1000);
-    }
-
-    function rest() {
-      scriptProcessor.disconnect();
-      setTimeout(() => work(rest), 5 * 60 * 1000);
-    }
-
     const $actionButton = document.getElementById('action-button');
     const $action = document.getElementById('action');
     const nextState = {
@@ -152,8 +142,26 @@
       '#pause': '#play',
     };
 
-    $action.addEventListener('custom-play', work);
-    $action.addEventListener('custom-pause', rest);
+    const timer = new Timer();
+    $action.addEventListener('custom-play', () => {
+      scriptProcessor.connect(context.destination);
+      if (timer.remain !== 0) {
+        timer.resume();
+      } else {
+        timer.start(25 * 60 * 1000)
+          .then(() => {
+            scriptProcessor.disconnect();
+            return timer.start(5 * 60 * 1000);
+          })
+          .then(() => {
+            // TODO:休憩時間が終わったときの処理
+            timer.reset();
+          });
+      }
+    });
+    $action.addEventListener('custom-pause', () => {
+      timer.pause();
+    });
 
     $action.addEventListener('transitionend', () => {
       if ($action.classList.contains('disabled')) {
