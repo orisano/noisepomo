@@ -66,19 +66,45 @@
     });
 
     let noiseGenerator = genPinkNoiseTH();
+
+    const noiseLock = {
+      lastWrite: null,
+      locked: false,
+      lock() {
+        this.locked = true;
+      },
+      unlock() {
+        this.locked = false;
+        if (this.lastWrite) {
+          noiseGenerator = this.lastWrite;
+          this.lastWrite = null;
+        }
+      },
+      write(noise) {
+        if (this.locked) {
+          this.lastWrite = noise;
+        } else {
+          noiseGenerator = noise;
+        }
+      },
+    };
+
     $noiseSelector.addEventListener('change', (ev) => {
-      noiseGenerator = noises[+ev.target.value].generator();
+      noiseLock.write(noises[+ev.target.value].generator());
     });
     const gain = 1;
 
     const context = new AudioContext();
     const BUFFER_SIZE = 4096;
     const scriptProcessor = context.createScriptProcessor(BUFFER_SIZE, 1, 1);
-    scriptProcessor.addEventListener('audioprocess', (ev) => {
+    scriptProcessor.addEventListener('audioprocess', async (ev) => {
       const output = ev.outputBuffer.getChannelData(0);
+
+      noiseLock.lock();
       for (let i = 0; i < BUFFER_SIZE; i += 1) {
         output[i] = noiseGenerator.next().value * gain;
       }
+      noiseLock.unlock();
     });
     const osc = context.createOscillator();
     osc.connect(scriptProcessor);
