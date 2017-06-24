@@ -19,7 +19,7 @@
         x = (x + z[i]) * 0.5;
       }
       out = (0.75 * x) + (0.25 * out);
-      yield out * 320;
+      yield out * 5000;
     }
   }
 
@@ -46,8 +46,9 @@
     // eslint-disable-next-line
     while (true) {
       const x = (Math.random() * 2) - 1;
-      acc += x * 0.064;
-      yield acc;
+      acc += x * 0.02;
+      acc /= 1.02;
+      yield acc * 3.7;
     }
   }
 
