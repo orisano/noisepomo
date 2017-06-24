@@ -186,6 +186,7 @@
       }
     });
     $action.addEventListener('custom-pause', () => {
+      scriptProcessor.disconnect();
       timer.pause();
     });
 
