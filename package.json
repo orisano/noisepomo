@@ -1,22 +1,9 @@
 {
   "name": "noisepomo",
-  "scripts": {
-    "lint": "prettier-eslint --write 'js/**/*.js'",
-    "fmt": "prettier --single-quote --write 'js/**/*.js'"
-  },
   "version": "1.0.0",
   "main": "index.js",
   "repository": "git@github.com:orisano/noisepomo.git",
   "author": "Nao Yonashiro <owan.orisano@gmail.com>",
   "license": "MIT",
-  "devDependencies": {
-    "eslint": "^4.18.2",
-    "eslint-config-airbnb-base": "^11.2.0",
-    "eslint-plugin-import": "^2.3.0",
-    "htmlhint": "^0.9.13",
-    "prettier": "^1.4.4",
-    "prettier-eslint": "^6.3.0",
-    "prettier-eslint-cli": "^4.1.1"
-  },
   "dependencies": {}
 }
